@@ -1,0 +1,128 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Ordering System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'foundation-5.5.2/css/foundation.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'foundation-icons/foundation-icons.css' %}"/>
+    {% block page_style %}{% endblock page_style %}
+
+
+</head>
+<body>
+<script>
+
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '410206499181926',
+            xfbml: true,
+            version: 'v2.4'
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    !function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, 'script', 'twitter-wjs');
+</script>
+
+<div class="contain-to-grid" style="padding-top: 10px; padding-bottom: 10px;">
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1 style="font-size: 35px;"><a href="{% url 'Customer:homepage' %}">G-Order</a></h1>
+            </li>
+            <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+        </ul>
+
+
+        <section class="top-bar-section">
+            <ul class="right">
+                {% if request.user.is_authenticated %}
+                    <li class="has-dropdown">
+                        <a href="{% url 'accounts:activityPage' %}" style="font-size: 20px; color: white;">
+                            {% if request.user.image %}
+                                <img src="{{ request.user.image.url }}"
+                                     style="height: 40px; width: auto; border-radius: 20px;">
+                            {% endif %}
+                            {% if request.user.first_name or request.user.last_name %}
+                                {{ request.user.first_name }} {{ request.user.last_name }}
+                            {% else %}
+                                {{ request.user.username }}
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="{% url 'accounts:profilePage' %}">Personal Profile</a></li>
+                            {% if request.user.restaurant %}
+                                <li><a href="{% url 'business:RestaurantPage' %}">{{ request.user.restaurant.name }}</a>
+                                </li>
+                                <li><a href="{% url 'business:ReportPage' %}">Weekly Report & Prediction</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+
+                {% else %}
+                    <li><a id="modalLink" data-reveal-id="loginModal" href="#">Login / Sign up</a></li>
+                {% endif %}
+            </ul>
+            {% block nav_section %}{% endblock nav_section %}
+        </section>
+    </nav>
+</div>
+
+<div id="loginModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog"></div>
+
+{% block context %}{% endblock context %}
+
+
+
+<script src="{% static 'foundation-5.5.2/js/vendor/jquery.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/vendor/modernizr.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation/foundation.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation.min.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation/foundation.topbar.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation/foundation.reveal.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation/foundation.tooltip.js' %}"></script>
+<script src="{% static 'foundation-5.5.2/js/foundation/foundation.dropdown.js' %}"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="{% static 'login.js' %}"></script>
+
+<script>
+    $(document).foundation();
+    {% if not request.user.is_authenticated %}
+        $("#loginModal").load("{% url 'accounts:modal_login' %}");
+    {% endif %}
+</script>
+
+{% block javascript %}{% endblock javascript %}
+
+<div class="row">
+<footer>
+  <p style="font-size:10px; margin-top:10px; background: #A0A0A0; color:#D8D8D8 ">Copyright © 2015 CMPT470 G14</p>
+</footer>
+</div>
+
+
+
+</body>
+</html>

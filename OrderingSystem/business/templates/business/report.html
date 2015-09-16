@@ -1,0 +1,278 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+
+{% block context %}
+    <div class="row">
+        <div class="columns medium-10 medium-centered">
+            <div id="prediction" style="margin: 0 auto;"></div>
+        </div>
+
+        <hr>
+        <div class="columns large-6">
+            <div id="order_price_chart" style="margin: 0 auto;"></div>
+        </div>
+        <div class="columns large-6">
+            <div id="order_num_chart" style="margin: 0 auto;"></div>
+        </div>
+
+        <div class="columns medium-6">
+            <div id="last_week" style="margin: 0;"></div>
+        </div>
+        <div class="columns medium-6">
+            <div id="second_last_week" style="margin: 0;"></div>
+        </div>
+    </div>
+
+
+{% endblock context %}
+
+{% block javascript %}
+    <script src="{% static 'js/highcharts.js' %}"></script>
+    <script src="{% static 'js/exporting.js' %}"></script>
+    <script>
+        var predict_data = []
+        {% for amount in predict_amount %}
+            predict_data.push({{ amount }});
+        {% endfor %}
+        $(function () {
+            $('#prediction').highcharts({
+                title: {
+                    text: 'Weekly Restaurant Revenue Prediction',
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: 'Powered by G-Order',
+                    x: -20
+                },
+                xAxis: {
+                    categories: days
+                },
+                yAxis: {
+                    title: {
+                        text: 'Predicted Revenue ($)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valuePrefix: '$'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Predicted Revenue',
+                    data: predict_data
+                }]
+            });
+        });
+
+        var days = [];
+        {% for day in day_name %}
+            days.push('{{ day }}');
+        {% endfor %}
+
+        var last_week_data = []
+        {% for amount in last_week_amount %}
+            last_week_data.push({{ amount }});
+        {% endfor %}
+
+        var second_last_week_data = []
+        {% for amount in second_last_week_amount %}
+            second_last_week_data.push({{ amount }});
+        {% endfor %}
+
+        $(function () {
+            $('#order_price_chart').highcharts({
+                title: {
+                    text: 'Revenue Report of Recent Two Weeks',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: days
+                },
+                yAxis: {
+                    title: {
+                        text: 'Order Total ($)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valuePrefix: '$'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Last Week Revenue',
+                    data: last_week_data
+                }, {
+                    name: 'Second Last Week Revenue',
+                    data: second_last_week_data
+                }]
+            });
+        });
+
+        $(function () {
+            $('#order_num_chart').highcharts({
+                title: {
+                    text: 'Ordering Quantity of Recent Two Weeks',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: days
+                },
+                yAxis: {
+                    title: {
+                        text: 'Order Count'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valuePrefix: ' Count '
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Last Week Order',
+                    data: {{ last_week_count|safe }}
+                }, {
+                    name: 'Second Last Week Order',
+                    data: {{ second_last_week_count|safe }}
+                }]
+            });
+        });
+
+
+
+        $(function () {
+            // Radialize the colors
+            Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                return {
+                    radialGradient: {
+                        cx: 0.5,
+                        cy: 0.3,
+                        r: 0.7
+                    },
+                    stops: [
+                        [0, color],
+                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                    ]
+                };
+            });
+
+            {% if last_week_order_count %}
+            // Build the chart
+            $('#last_week').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Dish Sold (Last week)'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}<br>Count: <b>{point.count}</b><br>Percentage: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}<br><b>{point.percentage:.1f}%</b>',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            connectorColor: 'silver'
+                        }
+                    }
+                },
+                series: [{
+                    name: "Last Week",
+                    data: [
+                        {% for dish, count in last_week_order_count.iteritems %}
+                            {name:"{{ dish }}", count: {{ count }}, y: {{ count}} },
+                        {% endfor %}
+                    ]
+                }]
+            });
+            {% endif %}
+
+
+
+            {% if second_last_week_order_count %}
+            // Build the chart
+            $('#second_last_week').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Dish Sold (Second Last week)'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}<br>Item Sold: <b>{point.count}</b><br>Percentage: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}<br><b>{point.percentage:.1f}%</b>',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            connectorColor: 'silver'
+                        }
+                    }
+                },
+                series: [{
+                    name: "Second Last Week",
+                    data: [
+                        {% for dish, count in second_last_week_order_count.iteritems %}
+                            {name:"{{ dish }}", count: {{ count }}, y: {{ count}} },
+                        {% endfor %}
+                    ]
+                }]
+            });
+            {% endif %}
+        });
+    </script>
+
+{% endblock javascript %}

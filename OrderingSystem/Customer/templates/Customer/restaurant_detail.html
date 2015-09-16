@@ -1,0 +1,395 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+{% block page_style %}
+    <link rel="stylesheet" href="{% static 'Customer/style.css' %}">
+
+{% endblock page_style %}
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+    {% if restaurant %}
+        <div id="black-screen">
+
+        </div>
+        <div id="image-tag">
+            <div href="" class="button" id="close-but">X</div>
+            <img src="">
+        </div>
+        <!-- page content -->
+        <div class="contain-to-grid"
+                {% if restaurant.image %}
+             style="background-size: cover; background-position: center; background-image: url('{{ restaurant.image.url }}');"
+                {% endif %}>
+            <br>
+
+            <div class="row collapse prefix-radius postfix-radius">
+                <form id="search_form" class="small-12 columns" method="post" action="{% url 'Customer:searchpage' %}"
+                      data-dropdown="hover1" data-options="is_hover:true; hover_timeout:1000">
+                    {% csrf_token %}
+                    <div class="row collapse prefix-radius postfix-radius">
+
+                        <div class="small-10 columns">
+                            {{ NavSearchForm.as_p }}
+                        </div>
+                        <div class="small-2 columns">
+                              <input id="key-input" style="padding: 0px;" class="button postfix radius" type="submit" value="Search"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- this is the place for search result -->
+
+            <ul id="hover1" class="f-dropdown large" data-dropdown-content>
+                <div id="search-results"></div>
+            </ul>
+
+
+            <div class="row" id="type_row">
+                <div class="small-12 large-12 columns">
+                    <span class="alert round label">{{ restaurant.get_category_display }}</span>
+                </div>
+            </div>
+
+            <div class="row" id="name_row">
+                <div class="small-8 medium-10 columns">
+                    <h1>{{ restaurant.name }}</h1>
+                </div>
+                <div class="small-4 medium-2 columns right" id="rating">
+                    <div class="row">
+                        <div class="small-12 columns ">
+                            <div class="success round label small-centered" id="rating_section">{{ rate }} </div>
+                        </div>
+                        <div class="small-12 columns white-font">
+                            base on <b>{{ ratecount }}</b> votes
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+            </div>
+        </div>
+        <div class="row collapse" id="main_content">
+            <div class="columns small-12 medium-4" id="left_section">
+                <div class="row">
+                    <div>Phone Number:</div>
+                    <h2>{{ restaurant.phone }}</h2>
+                </div>
+
+
+                <div class="row bottom-border" id="rest-number-info">
+                    <div class="columns small-6 right-border text-center">
+                        <div class="row">
+                            Comments:
+                        </div>
+                        <a id="comment_cont">
+                            <div class="row">
+                                {{ comment|length }}
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="columns small-6 text-center">
+                        <div class="row">
+                            Dishes:
+                        </div>
+                        <a href="{% url 'Customer:resaurant_dishlist' restaurant.id %}">
+                            <div class="row">
+                                {{ dishcount }}
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="row padding-tb" id="open-hour">
+                    <div>
+                        <span>Opening Hour</span>
+
+                    </div>
+                    <div>
+                        <span>Today : </span>
+                        <span class="black-font 15px-font">{{ restaurant.opentime }} - {{ restaurant.closetime }} </span>
+                    </div>
+                </div>
+                <div class="row padding-tb" id="server">
+                    <div class="">Provide Services:</div>
+
+                    <div class="paddin-tb service_tag">{% if restaurant.Provide_Delivery %}
+                        <img src="{% static 'Customer/image/yes.png' %}" height="25" width="25">{% else %}
+                        <img src="{% static 'Customer/image/no.png' %}" height="25" width="25">{% endif %}
+                        <span>&nbspDelivery</span></div>
+                    <div class="paddin-tb service_tag">{% if restaurant.Wifi %}
+                        <img src="{% static 'Customer/image/yes.png' %}" height="25" width="25">{% else %}
+                        <img src="{% static 'Customer/image/no.png' %}" height="25" width="25">{% endif %}
+                        <span>&nbspWifi</span></div>
+                    <div class="paddin-tb service_tag">{% if restaurant.Children_Friendly %}
+                        <img src="{% static 'Customer/image/yes.png' %}" height="25" width="25">{% else %}
+                        <img src="{% static 'Customer/image/no.png' %}" height="25" width="25">{% endif %}<span>&nbspChildren Friendly</span>
+                    </div>
+                    <div class="paddin-tb service_tag">{% if restaurant.Vegan %}
+                        <img src="{% static 'Customer/image/yes.png' %}" height="25" width="25">{% else %}
+                        <img src="{% static 'Customer/image/no.png' %}" height="25" width="25">{% endif %}<span>&nbspVegetarian Friendly</span>
+                    </div>
+                    <div class="paddin-tb service_tag">{% if restaurant.Gluten_Free %}
+                        <img src="{% static 'Customer/image/yes.png' %}" height="25" width="25">{% else %}
+                        <img src="{% static 'Customer/image/no.png' %}" height="25" width="25">{% endif %}<span>&nbspGluten-free</span>
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top: 20px;">
+                    <span class="fb-share-button" data-href="http://cmpt470.csil.sfu.ca:8014/{{ restaurant.id }}"
+                          data-layout="button" style="top: -6px;"></span>
+                    <a href="https://twitter.com/share" class="twitter-share-button"
+                       data-url="http://cmpt470.csil.sfu.ca:8014/{{ restaurant.id }}" data-count="none">Tweet</a>
+                    <span class="g-plus" data-action="share" data-annotation="none"></span>
+                </div>
+
+                <div class="row padding-tb">
+                    <div>Location:</div>
+                    <div class="black-font">
+                        {% if address %}
+                            {{ address.address }} {{ address.city }} {{ address.state }} {{ address.zipcode }}
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="row padding-tb">
+                    {% if address %}
+                        <div id="map-canvas"></div>
+                    {% endif %}
+                </div>
+
+
+
+            </div>
+            <div class="columns small-12 medium-8" id="middle-section">
+                <div class="row" id="description">
+                    <div class="row"> About: </div>
+                    <p>
+                        {{restaurant.msg}}
+                    </p>
+                    
+                </div>
+                <div class="row">
+                    <div class="">
+                        Menu:
+                    </div>
+                    <ul class="side-nav" id="top-3-menu">
+                        {% if dishes.0 %}
+                            <li class="top-1">
+                                <div class="row collapse postfix-round ">
+                                    <div class="column small-3 large-2">
+                                        {% if dishes.0.image %}
+                                            <img src="{{ dishes.0.image.url }}" style="max-height: 60px; max-width: 60px;">
+                                        {% endif %}
+                                    </div>
+                                    <div class="column small-6 large-8"><a href="dishlist#{{ dishes.0.id }}"
+                                                                           class="name"> {{ dishes.0.name }}</a></div>
+                                    <div class="column small-3 large-2">
+                                        <div class="label secondary ">
+                                            {% widthratio dishes.0.liked dishes.0.liked|add:dishes.0.unliked 100 %}% <br>like
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if dishes.1 %}
+                            <li class="top-2">
+                                <div class="row collapse postfix-round ">
+                                    <div class="column small-3 large-2">
+                                        {% if dishes.1.image %}
+                                            <img src="{{ dishes.1.image.url }}" style="max-height: 50px; max-width: 50px;">
+                                        {% endif %}
+                                    </div>
+                                    <div class="column small-6 large-8"><a href="dishlist#{{ dishes.1.id }}"
+                                                                           class="name"> {{ dishes.1.name }} </a></div>
+                                    <div class="column small-3 large-2">
+                                        <div class="label secondary ">
+                                            {% widthratio dishes.1.liked dishes.1.liked|add:dishes.1.unliked 100 %}% <br>like
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if dishes.2 %}
+                            <li class="top-3">
+                                <div class="row collapse postfix-round ">
+                                    <div class="column small-3 large-2">
+                                        {% if dishes.2.image %}
+                                            <img src="{{ dishes.2.image.url }}" style="max-height: 50px; max-width: 50px;">
+                                        {% endif %}
+                                    </div>
+                                    <div class="column small-6 large-8"><a href="dishlist#{{ dishes.2.id }}"
+                                                                           class="name"> {{ dishes.2.name }} </a></div>
+                                    <div class="column small-3 large-2">
+                                        <div class="label secondary ">
+                                            {% widthratio dishes.2.liked dishes.2.liked|add:dishes.2.unliked 100 %}% <br>like
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+                <div class="bottom-border row">
+                    <div class="column right small-2">
+                        <a href="{% url 'Customer:resaurant_dishlist' restaurant.id %}" class="text-center">More</a>
+                    </div>
+                </div>
+                <!--  Photos-->
+                <div class="row padding-tb" id="photo-section">
+                    <div>
+                        Photos
+                    </div>
+                    <div class="column small-12">
+                        {% if restaurant.image %}
+                            <span class="rest-pic" style="cursor:pointer;">
+                                <img src="{{ restaurant.image.url }}" style="max-height: 70px; max-width: 70px;"></span>
+                        {% endif %}
+                        {% for one in dishes %}
+                            {% if one.image %}
+                                <span class="dish-pic" style="cursor:pointer;">
+                                    <img src="{{ one.image.url }}" style="max-height: 70px; max-width: 70px;"></span>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div class="bottom-border row">
+                    
+                </div>
+                <div>
+                <div class="row padding-tb" id="comment-sec">
+                    <div class="row">
+                        <span class="columns small-6">
+                            Comments:
+                        </span>
+                        <a id="load-more-but">
+                            <i class="fi-pencil"></i>
+                            Write a comment
+                        </a>
+                    </div>
+                    
+                    
+                    
+                <div id="comment_wrap">
+                {% for one in comment %}
+                    <div style="padding:0 10px;">
+                        <div class="row collapse">
+                            <div class="column large-1 small-2" style="height:50px;width:50px;">
+                                {% if one.buyer.image %}
+                                <img src="{{ one.buyer.image.url }}" style="border-radius:5px; max-height: 50px; max-width: 50px;">
+                                {% else %}
+                                <img src="{% static 'Customer/image/carrot.png' %}" style="border-radius:5px;" height="50"
+                                     width="50">
+                                {% endif %}
+                            </div>
+                            <div class="column large-11 small-10">
+                                <div class="20px-height">{{ one.buyer.first_name }} {{ one.buyer.last_name }}</div>
+                                <div class="20px-height gray-font">{{ one.time }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column small-12">
+                                <span> Rating:</span>
+                                <span>{{ one.rating }}</span>
+                            </div>
+                        </div>
+                        <div class="row thick-bottom-border" style="margin-bottom:20px; padding-bottom:10px;">
+                            <div class="column small-12">
+                                {{ one.text }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                {% if request.user.first_name == None %}
+                <div class="row login_notice">
+                    Please Log in First 
+                </div>
+                {% else %}
+                <div class="row collapse" id="comment_form">
+                    
+                    <div class="column small-12 medium-1">
+                        {% if request.user.image %}
+                            <img src="{{ request.user.image.url }}" style="border-radius:5px; max-height: 50px; max-width: 50px;">
+                        {% else %}
+                            <img src="{% static 'Customer/image/carrot.png' %}" style="border-radius:5px; max-height: 50px; max-width: 50px;">
+                        {% endif %}
+
+                    </div>
+                    <div class="column small-12 medium-11 text">
+                        <form action="{% url 'Customer:resaurant_detail' restaurant.id %}"
+                              method="post">{% csrf_token %}
+                            {{ comment_form }}
+                            <input type="submit" class="button success small"value="Submit"/>
+                        </form>
+                    </div>
+
+
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    {% else %}
+        <div class="row">
+            <h1>
+                <a href="../"> This Resturant is not exist </a>
+            </h1>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock context %}
+
+
+
+{% block javascript %}
+    <script src="{% static 'Customer/rest.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
+
+    <script>
+        function initialize() {
+            var mapCanvas = document.getElementById('map-canvas');
+
+            var mapOptions = {
+                scaleControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                zoomControl: true,
+                center: new google.maps.LatLng({{ address.latitude }}, {{ address.longitude }}),
+                zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            var map = new google.maps.Map(mapCanvas, mapOptions)
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: map.getCenter()
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+            infowindow.setContent('{{ restaurant.name }}');
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+{% endblock %}

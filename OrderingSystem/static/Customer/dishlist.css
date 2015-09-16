@@ -1,0 +1,256 @@
+#Cart{
+    position: fixed;
+    width: 100px;
+    height: 40px;
+    right: 0;
+    bottom: 0;
+    background: #ccc;
+    z-index: 1000;
+}
+#Cart a{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    width: 100px;
+    text-align: center;
+}
+#black-screen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    background: black;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: none;
+}
+
+#loading-pic img {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+#close-but {
+    display: block;
+    min-height: 20px;
+    min-width: 20px;
+    float: right;
+    font-size: 25px;
+    line-height: 20px;
+    background: #ccc;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+#dish-content {
+    display: none;
+}
+#error{
+    display: none;
+    text-align: center;
+    color: red;
+    font-size: 16px;
+}
+#dish-info {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    z-index: 1000;
+    background: white;
+}
+#dish-comment{
+    margin: 10px;
+}
+#dish-comment .one-comment{
+    color: #666;
+}
+#type_row {
+    height: 50px;
+}
+
+#type_row .label {
+    height: 30px;
+    font-size: 18px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#name_row h1 {
+    color: white;
+}
+
+#rating {
+    font-size: 15px;
+    text-align: center;
+}
+
+#rating_section {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin: 0 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+    position: relative;
+    width: 50%;
+    min-width: 80px;
+    font-size: 20px;
+}
+
+#rating b {
+    font-size: 20px;
+}
+
+#main-content {
+    padding: 20px 10px;
+    color: #777;
+}
+
+.title {
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+#category-section {
+    position: relative;
+}
+
+#category-section .categories .columns {
+    text-align: center;
+}
+
+#category-section .categories .columns span {
+    font-size: 13px;
+}
+
+#category-section .categories {
+    border-bottom: 1px solid #777;
+    padding-bottom: 20px;
+}
+
+
+.one-dish-a {
+    position: relative;
+    display: block;
+}
+
+.one-dish {
+    height: 80px;
+    line-height: 80px;
+    margin-bottom: 10px;
+}
+
+.one-dish img {
+    margin-top: 5px;
+}
+
+.one-dish .column {
+    min-height: 80px;
+    line-height: 80px;
+}
+
+.one-dish .label {
+    min-height: 80px;
+    display: block;
+    line-height: 36px;
+    font-size: 20px;
+}
+
+.one-dish .label div {
+    width: 40px;
+    min-height: 40px;
+    margin: 15px auto;
+    line-height: 20px;
+    font-size: 18px;
+}
+
+.add-to-cart {
+    background: orange;
+    height: 21px;
+    color: white;
+    padding: 10px 5px;
+    cursor: pointer;
+}
+
+.add-to-cart:hover {
+    background: #FFCC66;
+}
+
+#dish-content {
+    position: relative;;
+}
+
+.dish-info {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#dish-content .dish-like-section {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 auto;
+}
+
+.dish-price {
+    color: red;
+    font-weight: bold;
+}
+
+#dish-content .dish-like-section .dish-like {
+    color: #5f5;
+    background: #efe;
+}
+
+#dish-content .dish-like-section .dish-unlike {
+    color: #f55;
+    background: #fee;
+}
+
+.loading-pic {
+    width: 50px;
+    height: 50px;
+}
+
+.dish-name {
+    font-size: 20px;
+}
+
+.dish-descp {
+    color: #888;
+}
+
+/* */
+.pointer {
+    cursor: pointer;
+}
+
+.white-font {
+    color: white;
+}
+
+.black-font {
+    color: black;
+}
+
+.right-border {
+    border-right: 1px solid #aaa;
+}
+
+.bottom-border {
+    border-bottom: 1px solid #aaa;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.padding-tb {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}

@@ -1,0 +1,203 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+
+{% block page_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'Customer/homepage.css' %}"/>
+{% endblock page_style %}
+
+
+{% block nav_section %}
+{% endblock nav_section %}
+
+{% block context %}
+    <!--navigation bar-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <div id="black-screen">
+    </div>
+    <div id="image-tag">
+        <img src="">
+    </div>
+    <div class="contain-to-grid">
+
+        <div class="row collapse prefix-radius postfix-radius">
+            <form id="search_form" class="small-12 columns" method="post" action="{% url 'Customer:searchpage' %}"
+                  data-dropdown="hover1" data-options="is_hover:true; hover_timeout:1000">
+                {% csrf_token %}
+                <div class="row collapse prefix-radius postfix-radius">
+
+                    <div class="small-10 columns">
+                        {{ NavSearchForm.as_p }}
+                    </div>
+                    <div class="small-2 columns">
+                        <input id="key-input" style="padding: 0px;" class="button postfix radius" type="submit" value="Search"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- this is the place for search result -->
+
+        <ul id="hover1" class="f-dropdown large" data-dropdown-content>
+          <div id="search-results"></div>
+        </ul>
+    </div>
+
+    <!--google map-->
+    <div class="row">
+        <div class="columns small-12" id="map-canvas"></div>
+    </div>
+
+    <!--after map-->
+    <div class="row collapse" id="main_content">
+
+        <div class="columns small-12 large-3" id="left_section">
+            <div class="row" style="margin-top: 20px;">
+                <span class="fb-share-button" data-href="http://cmpt470.csil.sfu.ca:8014/"
+                      data-layout="button" style="top: -6px;"></span>
+                <a href="https://twitter.com/share" class="twitter-share-button"
+                   data-url="http://cmpt470.csil.sfu.ca:8014/" data-count="none">Tweet</a>
+                <span class="g-plus" data-action="share" data-annotation="none"></span>
+            </div>
+            <div class="row">
+                <h4 style="text-align: center; padding-top: 10px; padding-bottom: 7px;"><b>Filters</b></h4>
+
+                <span class="button secondary" style=" width: 100%;" id="cuisine-btn" abb="">select Cuisine</span>
+                <ul id="cuisine_list">
+                    <li class="cuisine_item" abb="jpf">Japanese</li>
+                    <li class="cuisine_item" abb="cns">Chinese</li>
+                    <li class="cuisine_item" abb="ff">Fast Food</li>
+                    <li class="cuisine_item" abb="wst">Western</li>
+                </ul>
+
+
+                <div>
+                    <!--checkbox for services-->
+                    <div class="small-12 columns">
+                        <h5>Check the services</h5>
+
+                        {% csrf_token %}
+
+                        <div>
+                            <input id="checkDelivery" type="checkbox" name="Provide_Delivery"><label for="checkbox1">Delivery</label>
+                        </div>
+                        <div>
+                            <input id="checkWifi" type="checkbox" name="Wifi"><label for="checkbox2">Wifi</label>
+                        </div>
+                        <div>
+                            <input id="checkChildren" type="checkbox" name="Children_Friendly"><label for="checkbox3">Children
+                            Friendly</label>
+                        </div>
+                        <div>
+                            <input id="checVegan" type="checkbox" name="Vegan"><label for="checkbox4">Vegetarian
+                            Friendly</label>
+                        </div>
+                        <div>
+                            <input id="checkGluten" type="checkbox" name="GlutenFree"><label
+                                for="checkbox5">Gluten-free</label>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <!--restaurant list-->
+        <div class="columns small-12 large-9" id="middle-section">
+            <div id="loading-pic">
+                <img src="{% static 'Customer/image/loading.gif' %}" heigh="50" width="50">
+            </div>
+            <div class="row" id="has_result">
+                <div class="columns small-12" style="overflow-y: scroll; max-height: 450px;">
+                    {% if restaurant_list %}
+                        {% for r in list %}
+                            <div class="restaurant_item row">
+                                <!--left words-->
+                                <div class="columns small-10 large-8">
+                                    <a href="{% url 'Customer:resaurant_detail' r.r.id %}"
+                                       class="rest_name">{{ r.r.name }}</a>
+
+                                    <div style="color: #757575">Cuisine: {{ r.r.get_category_display }}</div>
+                                    <div class="rest_address">{{ r.address.0.city }}: {{ r.address.0.address }} </div>
+                                    <div class="rest_tags">
+                                        <span class="round secondary label"><a
+                                                href="{% url 'Customer:resaurant_detail' r.r.id %}dishlist">Menu</a></span>
+                                        <span class="round secondary label"><a
+                                                href="{% url 'Customer:resaurant_detail' r.r.id %}#photos">Pictures</a></span>
+                                        <span class="round secondary label"><a
+                                                href="{% url 'Customer:resaurant_detail' r.r.id %}#comment">Comment</a></span>
+                                    </div>
+                                </div>
+                                <!--right pic-->
+                                <div class="columns small-2 large-4 right rating">
+                                    <div class="row">
+                                        <div class="small-12 columns rating_section">
+                                            <div class="row rating_section">
+                                                <div class="info round label small-centered rate_label">{{ r.rating }}</div>
+                                                <div class="vote">{{ r.vote }} votes</div>
+                                            </div>
+                                        </div>
+                                        <div class="column small-12">
+                                            {% if r.r.image %}
+                                                <span class="rest_pic"><img src=" {{ r.r.image.url }} "
+                                                                            height="60" width="60"></span>
+                                            {% endif %}
+                                            <!-- {% for one in dishes %}
+                                                {% if one.image %}
+                                                    <span class="dish-pic" style="cursor:pointer;"><img
+                                                            src="{{ one.image.url }}" height="60" width="60"></span>
+                                                {% endif %}
+                                            {% endfor %} -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>No Restaurants are available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <script src="{% static 'Customer/homepage.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
+    <script src="{% static 'js/googlemap.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+{% endblock context %}
+
+{% block javascript %}
+    <script>
+        $("#cuisine-btn").click(function () {
+            $("#cuisine_list li").slideToggle("300");
+        });
+
+        var restaurants = [];
+        {% for one in list %}
+            var one_restaurant = [];
+            one_restaurant.push("{{ one.r.name }}");
+            one_restaurant.push({{ one.r.address.all.0.latitude }});
+            one_restaurant.push({{ one.r.address.all.0.longitude }});
+            one_restaurant.push({{ one.r.id }});
+            one_restaurant.push({{ one.rating }});
+            one_restaurant.push("{{ one.r.get_category_display }}");
+            one_restaurant.push("{% url 'Customer:resaurant_detail' one.r.id %}");
+            restaurants.push(one_restaurant);
+        {% endfor %}
+
+        $(document).ready(function () {
+            google.maps.event.addDomListener(window, 'load', initialize);
+        });
+    </script>
+
+{% endblock %}

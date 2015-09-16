@@ -1,0 +1,37 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block page_style %}
+{% endblock page_style %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active">
+            </li>
+    </ul>
+
+{% endblock nav_section %}
+{% block context %}
+
+            <fieldset class="columns small-6 small-centered ">
+            <legend >Orders:</legend>
+            <ul>
+                {% for order in orders %}
+
+
+                        <li style="list-style-type: none;">
+                            <a class="center"
+                               href="{% url 'accounts:orderdetail' order.id%}">{{ 'Order:' }} {{ order.id }}</a>
+                        <a class="right" href="{% url 'Customer:resaurant_detail' order.restaurant.id%}">{{ order.restaurant.name }}</a>
+                        </li>
+
+
+                {% endfor %}
+
+            </ul>
+
+        </fieldset>
+
+
+{% endblock context %}

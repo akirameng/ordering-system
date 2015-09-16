@@ -1,0 +1,131 @@
+{% extends "Customer/base.html" %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+
+{% block context %}
+    <div class="row">
+        {% if restaurant.image %}
+            <div class="columns small-12"
+                 style="width: 100%; height: 250px; overflow: hidden; background-size: cover; background-position: center; background-image: url('{{ restaurant.image.url }}');"></div>
+        {% endif %}
+
+        <div class="columns medium-8 small-centered medium-uncentered">
+            <h3>{{ restaurant.name }} <a class="button round" style="padding: 10px;"
+                                         href="{% url 'business:EditRestaurantPage' %}">Edit</a></h3>
+
+            <h4>
+                <small>{{ restaurant.msg|linebreaks }}</small>
+            </h4>
+            <div>
+                <b>Address: </b>{{ address.address }} {{ address.city }}, {{ address.state }}, {{ address.zipcode }}
+            </div>
+            <div><b>Business Phone: </b>{{ restaurant.phone }}</div>
+            <div><b>Open Time: </b>{{ restaurant.opentime }}</div>
+            <div><b>Close Time: </b>{{ restaurant.closetime }}</div>
+            <div class="row">
+                <div class="columns small-8" style="margin-top: 20px;">
+                    <span class="fb-share-button" data-href="http://cmpt470.csil.sfu.ca:8014/{{ restaurant.id }}"
+                          data-layout="button" style="top: -6px;"></span>
+                    <a href="https://twitter.com/share" class="twitter-share-button"
+                       data-url="http://cmpt470.csil.sfu.ca:8014/{{ restaurant.id }}" data-count="none">Tweet</a>
+                    <span class="g-plus" data-action="share" data-annotation="none"></span>
+                </div>
+                <div class="columns small-4">
+                    <a class="button medium radius alert right" style="padding: 10px;"
+                       href="{% url 'business:OrderListPage' %}">View Orders</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns medium-4 small-centered medium-uncentered" style="">
+            <div id="map" style="height: 250px; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="columns small-12">
+            <fieldset>
+                <legend>
+                    Dishes:
+                </legend>
+                <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
+                    {% for dish in dishes %}
+                        <li>
+                            {% if dish.image %}
+                                <a class="th" href="{% url 'business:DishPage' dish.id %}">
+                                    <img src="{{ dish.image.url }}">
+                                </a>
+                            {% endif %}
+                            <div>
+                                <a class="left" href="{% url 'business:DishPage' dish.id %}">{{ dish.name }}</a>
+                                <span class="right fi-price-tag">{{ dish.price }}</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                <li><a id="modalLink" data-reveal-id="AddDishModal" href="#" class="button success round text-center"
+                   style="padding: 10px;">Add a Dish</a></li>
+                </ul>
+
+            </fieldset>
+        </div>
+    </div>
+
+    <div id="AddDishModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true"
+         role="dialog">
+        <form action="{% url 'business:RestaurantPage' %}" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Add a dish to your restaurant:</legend>
+                {% csrf_token %}
+                {{ dish_form }}
+                <input class="small button success right" type="submit" value="Add"/>
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="fb-root"></div>
+
+{% endblock context %}
+
+{% block javascript %}
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script>
+        $(document).ready(function () {
+            {% if address.latitude == None or address.longitude == None %}
+                document.getElementById('map').removeAttribute('style');
+                document.getElementById('map').innerHTML = '<fieldset><h4 class="subheader text-center">Address is invalid. <br>No location information.</h4></fieldset>'
+            {% else %}
+                var latlng = new google.maps.LatLng({{ address.latitude }}, {{ address.longitude }});
+
+                var mapOptions = {
+                    zoom: 15,
+                    center: latlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+                latlng = new google.maps.LatLng("{{ address.latitude }}", "{{ address.longitude }}");
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    title: "{{ restaurant.name }}"
+                });
+
+                var infoWindow = new google.maps.InfoWindow({
+                    content: '<div>{{ restaurant.name }}</div>'
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    infoWindow.open(map, marker);
+                });
+            {%  endif %}
+        });
+    </script>
+
+{% endblock javascript %}

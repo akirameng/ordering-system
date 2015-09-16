@@ -1,0 +1,33 @@
+{% extends "Customer/base.html" %}
+
+
+{% block nav_section %}
+
+
+{% endblock nav_section %}
+
+
+{% block context %}
+
+
+
+    <div class="row">
+        <fieldset class="columns small-11 large-9 small-centered large-centered">
+            <legend>In Progress:</legend>
+            <ul>
+                {% for order in progorders %}
+
+                    <li><a class="medium"
+                           href="{% url 'business:OrderPage' order.id %}">{{ 'Order:' }} {{ order.id }}</a>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </fieldset>
+
+    </div>
+
+
+
+
+{% endblock context %}

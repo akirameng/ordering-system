@@ -1,0 +1,205 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block page_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'Customer/orderCompletePage.css' %}"/>
+
+    <script>
+
+        window.addEventListener('load',function(event){
+
+            var tr = document.getElementsByTagName("tr");
+
+            if(tr.length > 3)
+            {
+                var number = (tr.length - 3) * 43 + 750;
+                var heightPx = number + "px";
+                document.getElementById("cart-container").style.height = heightPx;
+            }
+
+
+
+            var tr = document.getElementsByTagName("tr");
+            var total = 0;
+            for(var i = 1; i < tr.length; i++)
+            {
+
+                var td = tr[i].childNodes;
+                //var p = td[3].innerHTML.substring(1, td[3].innerHTML.length);
+            
+                var p = td[3].innerHTML.substring(1, td[3].innerHTML.length);
+                
+                // p = (td[3].childNodes)[0].value.substring(1, (td[3].childNodes)[0].value.length)
+                
+                var t = parseInt(td[5].innerHTML) * parseFloat(p);
+               
+                total = total + t;
+                td[7].innerHTML = "$" + Math.round(t * 100) / 100;
+            }
+
+            total = Math.round(total * 100) / 100;
+            document.getElementById("totalPrice").innerHTML = "$" + total;
+
+
+        });
+
+
+    </script>
+
+{% endblock page_style %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+
+    <div class="nav-bar row">
+
+        <a class="website-logo" href="{% url 'Customer:homepage' %}">Home</a>
+        >
+        <a class="nav-restName" href="{% url 'Customer:resaurant_detail' r.id %}">{{ r.name }}</a>
+        >
+        <a class="nav-conf">Confirmation</a>
+
+        <!-- <div>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div> -->
+    </div>
+
+    <div class="row" id="cart-container">
+
+
+{% if order %}
+
+
+        <p class="warning">
+            Successful Order!
+        </p>
+
+        <div class="columns small-12">
+            <div class="row">
+                <div class="columns small-4">
+                    <div class="rest-logo">
+                        {% if r.image %}
+                            <a href="#"><img src="{{ r.image.url }}"></a>
+                        {% else %}
+                            <a href="#"><img src="{% static 'Customer/image/orderPage1.jpeg' %}"></a>
+                        {% endif %}
+                    </div>
+
+                    <div class="crst-info">
+                        <a class="crst-name" title="{{ r.name }}" href="{% url 'Customer:resaurant_detail' r.id %}">{{ r.name }}</a>
+
+                        <p class="crst-flavor">
+                            {{r.get_category_display}}
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="columns small-8">
+                    <ul>
+                        <li class="flow-nav">Place an order</li>
+                        <li class="flow-nav">Order's information</li>
+                        <li class="flow-nav">Order completed</li>
+                    </ul>
+                    <img class="flow-nav-pic" src="{% static 'Customer/image/orderCompletePage.png' %}" width="300">
+                </div>
+            </div>
+
+            <table style="width:100%">
+                <tr class="order-table-title">
+                    <td style="width:60%">Food Basket</td>
+                    <td>Unit Price</td>
+                    <td style="width:15%">Quantity</td>
+                    <td>Total</td>
+                </tr>
+
+                {% for o in order_items %}
+                    {% ifequal newOrder o.Order %}
+                    <tr class="order-table-detail">
+                        <td>{{ o.Dish.name }}</td>
+                        <td>${{ o.Dish.price }}</td>
+                        <td>{{ o.number }}</td>
+                        <td></td>
+                    </tr>
+                    {% endifequal %}
+                {% endfor %}
+               
+                
+            </table>
+
+            <div class="total-payment">
+                <p class="order-table-total-amount" id="totalPrice" style="font-weight: bold;"><strong></strong></p>
+
+                <p class="order-table-total-order">Amounts：</p>
+            </div>
+
+            <div class="personal-section">
+                <p><b>Person: </b>{{ request.user.first_name }} {{ request.user.last_name }}</p>
+            </div>
+
+            <hr/>
+
+            <div>
+                <p><b>Phone Number: </b>{{ newOrder.buyer.phone }}</p>
+            </div>
+
+            <hr/>
+
+            <div class="deliverTypeSection">
+                {% if newOrder.delivery_type == 0 %}
+                <p><b>Delivery Address:</b> Pick Up</p>
+                {% else %}
+                <p><b>Delivery Address: </b> {{ newOrder.location }}</p>
+                {% endif %}
+                
+            </div>
+
+            <hr/>
+
+            <div>
+                <p class="paymentP"><b>Payment Method: </b>Payment on delivery</p>
+                
+                
+            </div>
+
+            <hr/>
+
+
+            <div>
+                <a href="{% url 'accounts:orderPage' %}" class="button previousOrders">Previous Orders</a>
+
+            </div>
+
+{% else %}
+
+<div class="row">
+<div class="column small-2 noOrderPic">
+    <img src="{% static 'Customer/image/orderCompletePage2.jpeg' %}" width="100" >
+</div>
+
+<div class="column small-7">
+    <p class="noOrderP">You Haven't Order Yet!</p>
+
+    <p>Please Order.</p>
+
+</div>
+
+</div>
+{% endif %}
+            
+
+            <div>
+                <a href="{% url 'Customer:homepage' %}" class="button goHomePageButton">Home</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock context %}

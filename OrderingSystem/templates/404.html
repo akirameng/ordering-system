@@ -1,0 +1,16 @@
+{% extends "Customer/base.html" %}
+
+
+{% block context %}
+    <div class="row">
+        <div class="columns small-12">
+            <h1>Sorry</h1>
+            <br>
+            <h3>The page you are accessing is not found. Please check the address.</h3>
+            <h3>{{ request.build_absolute_uri }}</h3>
+        </div>
+    </div>
+
+
+
+{% endblock %}

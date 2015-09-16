@@ -1,0 +1,105 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block page_style %}
+{% endblock page_style %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active">
+        </li>
+    </ul>
+
+
+{% endblock nav_section %}
+{% block context %}
+    <fieldset class="columns small-6 small-centered ">
+        <legend >Order Detail:</legend>
+
+
+        <ul>
+            <h>Dishes:</h>
+            {% if dishlist %}
+                {% for dish in dishlist %}
+                    <li style="list-style-type: none;">
+
+                        <a class="medium"
+                           href="/{{ dish.r.id }}/dishlist#{{ dish.d.id }}">{{ dish.d.name }}</a>
+                        <h class="right"> {{ dish.d.price }}{{ '$ ×' }}{{ dish.n }}</h>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+
+
+        <ul>
+            <h>Delivery Type:</h>
+            <li style="list-style-type: none;">
+                {% for key, value in deliverytype.items %}
+                    {% if key == order.delivery_type %}
+                        <p>{{ value }}</p>
+                    {% endif %}
+                {% endfor %}
+            </li>
+        </ul>
+
+
+
+        <ul>
+            <h>Payment Status:</h>
+            <li style="list-style-type: none;">
+                {% for key, value in paytype.items %}
+                    {% if key == order.paid %}
+                        <p>{{ value }}</p>
+                    {% endif %}
+                {% endfor %}
+            </li>
+        </ul>
+
+
+        {% if order.location %}
+
+
+            <ul>
+                <h>Location:</h>
+                <li style="list-style-type: none;">
+
+                    {{ order.location }}
+
+                </li>
+            </ul>
+
+        {% endif %}
+
+        <ul>
+            <h>Order Time:</h>
+            <li style="list-style-type: none;">
+
+                {{ order.time }}
+
+            </li>
+        </ul>
+
+        <ul>
+            <h>Total Price:</h>
+            <li style="list-style-type: none;">
+
+                {{ order.total_price }}
+
+            </li>
+        </ul>
+
+
+        <ul>
+            <h>Discount:</h>
+            <li style="list-style-type: none;">
+
+                {{ order.discount }}
+
+            </li>
+        </ul>
+    </fieldset>
+
+
+{% endblock context %}

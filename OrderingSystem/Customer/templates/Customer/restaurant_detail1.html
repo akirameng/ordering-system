@@ -1,0 +1,43 @@
+{% extends "business/base.html" %}
+
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+    <h1>Restaurant: {{ restaurant.name }}</h1>
+    <dl class="display">
+        <dt><b>msg:</b></dt>
+        <dd>
+            <div class="field">{{ restaurant.msg }}</div>
+        </dd>
+        <dt><b>image:</b></dt>
+        <dd>
+            <div class="field">{{ restaurant.image }}</div>
+        </dd>
+        <dt><b>Phone Number:</b></dt>
+        <dd>
+            <div class="field">{{ restaurant.phone }}</div>
+        </dd>
+
+
+    </dl>
+
+    <ul>
+        {% for p in dishes %}
+            <li>{{ p.name }}</li>
+        {% endfor %}
+    </ul>
+
+
+
+
+
+{% endblock context %}
+
+

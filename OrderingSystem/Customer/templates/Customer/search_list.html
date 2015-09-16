@@ -1,0 +1,20 @@
+{% if results %}
+    {% for restaurant in results %}
+        <li>
+            <a class="center" href="{% url 'Customer:resaurant_detail' restaurant.id %}">
+                <span style=" font-weight: bold;">{{ restaurant.name }}</span>
+                <p class="center">{{ restaurant.msg }}</p>
+            </a>
+
+        </li>
+    {% endfor %}
+{% endif %}
+
+{% if dishresults %}
+    {% for dish in dishlist %}
+        <li>
+            <a href="/{{ dish.r.id }}/dishlist#{{ dish.d.id }}">{{ 'Dish:' }} {{ dish.d.name }}</a>
+        </li>
+    {% endfor %}
+{% endif %}
+

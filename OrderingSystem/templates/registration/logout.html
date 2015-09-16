@@ -1,0 +1,19 @@
+{% extends "Customer/base.html" %}
+
+
+{% block context %}
+
+    <div class="row">
+        <div class="columns medium-10 small-centered">
+            <h3>Logout successful.</h3>
+            <h4>Redirecting to homepage after 3 seconds.</h4>
+        </div>
+    </div>
+
+{% endblock context %}
+
+{% block javascript %}
+    <script>
+    setTimeout(function(){ window.location.replace("{% url 'Customer:homepage' %}"); }, 3000);
+    </script>
+{% endblock javascript %}

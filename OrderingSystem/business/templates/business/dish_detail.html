@@ -1,0 +1,25 @@
+{% extends "Customer/base.html" %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href="{% url 'business:RestaurantPage' %}">Cancel</a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+
+
+    <div class="row">
+        <div class="columns small-8 small-centered">
+            <form action="{% url 'business:DishPage' dish.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ dish_form }}
+                <input class="small button success right" type="submit" value="Update"/>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock context %}

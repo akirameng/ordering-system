@@ -1,0 +1,33 @@
+{% extends "Customer/base.html" %}
+
+
+{% block context %}
+
+    <div class="row">
+        <div class="columns medium-10 small-centered">
+            <form action="." method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Registering:</legend>
+                    {% for field in form %}
+                        <label class="{{ field.help_text|yesno:"has-tip," }}{{ field.errors|yesno:" error," }}"
+                                {% if field.help_text %}
+                               data-tooltip aria-haspopup="true"
+                               title="{{ field.help_text }}"{% endif %}>
+                            {{ field.label }}
+                            <small>{{ field.field.required|yesno:'required,' }}</small>
+                            {{ field }}
+                        </label>
+                        {% if field.errors %}
+                            <small class="error">{{ field.errors }}</small>
+                        {% endif %}
+                    {% endfor %}
+                    <input class="small button success right" type="submit" value="Create an account"/>
+                </fieldset>
+            </form>
+
+        <p><a href="{% url 'social:begin' 'google-oauth2' %}">Register using your Google Account</a></p>
+        </div>
+    </div>
+
+{% endblock context %}

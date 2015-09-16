@@ -1,0 +1,119 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block page_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'Customer/homepage.css' %}"/>
+{% endblock page_style %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active">
+        </li>
+    </ul>
+    <ul class="right">
+        <li class="active"><a href="{% url 'Customer:homepage' %}">Back</a></li>
+    </ul>
+{% endblock nav_section %}
+{% block context %}
+
+
+    <fieldset class="columns small-10 small-centered ">
+        <legend >About {{ count }} restaurants and {{ dishcount }} dishes:</legend>
+        <!--restaurant list-->
+        <div class="columns small-10 small-centered " id="middle-section" style="background-color: #FFFFFF;min-height: 2000px; padding-top: 20px;">
+
+            <div class="row" id="has_result"> </div>
+            <div class="columns small-12">
+                {% if list %}
+                    {% for r in list %}
+                        <div class="restaurant_item row">
+                            <!--left words-->
+                            <div class="columns small-10 large-8">
+                                <a href="{% url 'Customer:resaurant_detail' r.r.id %}" class="rest_name">{{ r.r.name }}</a>
+                                <div style="color: #757575">Cuisine: {{r.r.get_category_display}}</div>
+                                <div class="rest_address">{{r.address.0.city}}: {{r.address.0.address}} </div>
+                                <div class="rest_tags">
+                                    <span class="round secondary label" ><a href="{% url 'Customer:resaurant_detail' r.r.id %}dishlist">Menu</a></span>
+                                    <span class="round secondary label" ><a href="{% url 'Customer:resaurant_detail' r.r.id%}#photos">Pictures</a></span>
+                                    <span class="round secondary label" ><a href="{% url 'Customer:resaurant_detail' r.r.id%}#comment">Comment</a></span>
+                                </div>
+                            </div>
+                            <!--right pic-->
+                            <div class="columns small-2 large-4 right rating" >
+                                <div class="row">
+                                    <div class="small-12 columns rating_section">
+                                        <div class="row rating_section">
+                                            <div class="info round label small-centered rate_label" >{{r.rating}}</div>
+                                            <div class="vote">{{r.vote}} votes</div>
+                                        </div>
+                                    </div>
+                                    <div class="column small-12">
+                                        {%if r.r.image %}
+                                            <span class="rest_pic" ><img src=" {{ r.r.image.url }} "
+                                                                         height="60" width="60"></span>
+                                        {%endif %}
+                                        {% for one in dishes %}
+                                            {% if one.image %}
+                                                <span class="dish-pic" style="cursor:pointer;"><img src="{{ one.image.url }}" height="60"width="60"></span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+
+
+                {% else %}
+                    <p>No Restaurants are available.</p>
+                {% endif %}
+            </div>
+
+
+
+
+
+            <div class="columns small-12">
+                {% if dishlist %}
+                    {% for dish in dishlist %}
+                        <div class="restaurant_item row">
+                            <!--left words-->
+                            <div class="columns small-10 large-8">
+                                <a class="medium"
+                                   href="/{{ dish.r.id }}/dishlist#{{ dish.d.id }}">{{ 'Dish:' }} {{ dish.d.name }}</a>
+
+                                <div class="rest_tags">
+                                    <span><h>{{dish.d.description}}</h></span>
+                                </div>
+                            </div>
+                            <!--right pic-->
+                            <div class="columns small-2 large-4 right rating" >
+                                <div class="row">
+                                    <div class="small-12 columns rating_section">
+                                        <div class="row rating_section">
+                                            {%if dish.d.image %}
+                                                <span class="rest_pic" ><img src=" {{ dish.d.image.url }} "
+                                                                             height="60" width="60"></span>
+                                            {%endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+
+                {% else %}
+                    <p>No Dishes are available.</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+        </div>
+
+    </fieldset>
+
+{% endblock context %}

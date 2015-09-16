@@ -1,0 +1,239 @@
+#black-screen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    background: black;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    display: none;
+}
+
+#map-canvas {
+    height: 230px;
+}
+
+#close-but {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: #eee;
+    z-index: 200;
+    display: none;
+}
+
+#image-tag {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+#image-tag img {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+#type_row {
+    height: 50px;
+}
+
+#type_row .label {
+    height: 30px;
+    font-size: 18px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#name_row h1 {
+    color: white;
+}
+
+#rating {
+    font-size: 15px;
+    text-align: center;
+}
+
+#rating_section {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin: 0 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+    position: relative;
+    width: 50%;
+    min-width: 80px;
+    font-size: 20px;
+}
+
+#rating b {
+    font-size: 20px;
+}
+
+#left_section {
+    background: #eee;
+    padding: 10px;
+    color: #666;
+}
+
+#rest-number-info {
+    margin: 10px 0;
+}
+.service_tag span{
+    display: inline-block;
+    padding-left: 5px;
+}
+#open-hour a {
+    font-size: 13px;
+}
+
+#middle-section {
+    padding: 10px;
+    color: #777;
+}
+#description div{
+    color: #666;
+    font-size: 17px;
+}
+#description p{
+    color: black;
+}
+#top-3-menu {
+    padding: 0;
+}
+
+#top-3-menu li {
+
+}
+
+#top-3-menu .label {
+    height: 100%;
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#top-3-menu img {
+    border-radius: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#top-3-menu .top-1 {
+    height: 70px;
+    font-size: 20px;
+}
+
+#top-3-menu .top-1 .column {
+    height: 70px;
+}
+
+#top-3-menu .top-1 .name {
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#top-3-menu img {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#top-3-menu .top-1 .label {
+    line-height: 25px;
+}
+
+#top-3-menu .top-2, #top-3-menu .top-3 {
+    height: 60px;
+    font-size: 18px;
+}
+
+#top-3-menu .top-2 .column, #top-3-menu .top-3 .column {
+    height: 60px;
+}
+
+#top-3-menu .top-2 .column a, #top-3-menu .top-3 a {
+    height: 60px;
+    line-height: 46px;
+}
+
+#top-3-menu .top-2 .label, #top-3-menu .top-3 .label {
+    line-height: 20px;
+}
+
+#top-3-menu .top-3 {
+    font-size: 18px;
+}
+
+#photo-section {
+
+}
+
+#load-more-but {
+    position: relative;
+    float: right;
+    text-align: center;
+}
+#comment_form .text{
+    padding-left: 10px;
+}
+.login_notice{
+    text-align: center;
+    color:#777;
+    
+    font-weight: bold;
+}
+/* */
+.pointer {
+    cursor: pointer;
+}
+
+.white-font {
+    color: white;
+}
+
+.black-font {
+    color: black;
+}
+
+.right-border {
+    border-right: 1px solid #aaa;
+}
+
+.thick-bottom-border {
+    border-bottom: 3px solid #aaa;
+}
+
+.bottom-border {
+    border-bottom: 1px solid #aaa;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.padding-tb {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.px-font {
+    font-size: 15px;
+}
+
+#id_rating
+{
+    width: 80px;
+}

@@ -1,0 +1,106 @@
+{% extends "Customer/base.html" %}
+{% load staticfiles %}
+
+{% block page_style %}
+{% endblock page_style %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active">
+            <a id="modalLink" data-reveal-id="editProfileModal" href="#" class="button round right"
+               style="padding: 8px;">Edit</a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+    <div class="row">
+        <fieldset>
+            <legend>Profile</legend>
+            <div class="row" data-equalizer>
+                <div class="columns medium-6">
+                    <fieldset data-equalizer-watch>
+                        <legend>Avatar</legend>
+                        {% if request.user.image %}
+                            <img src="{{ request.user.image.url }}" style="max-height: 200px;">
+                        {% endif %}
+                    </fieldset>
+                </div>
+                <div class="columns medium-6">
+                    <fieldset data-equalizer-watch>
+                        <legend>Detail</legend>
+                        <div class="row">
+                            First Name: {{ request.user.first_name }}
+                        </div>
+                        <div class="row">
+                            Last Name: {{ request.user.last_name }}
+
+                        </div>
+                        <div class="row">
+                            Email: {{ request.user.email }}
+
+                        </div>
+                        <div class="row">
+                            Last login time: {{ request.user.last_login }}
+                        </div>
+                        <div class="row">
+                            Phone Number: {{ request.user.phone }}
+                        </div>
+                    </fieldset>
+
+                </div>
+            </div>
+            <div class="row">
+                <ul class="text-center stack-for-small round button-group">
+                    <li><a class="button success" href="{% url 'accounts:orderPage' %}">View More Orders</a>
+                    </li>
+                    {% if request.user.restaurant %}
+                        <li><a class="button"
+                               href="{% url 'business:RestaurantPage' %}">Manage {{ request.user.restaurant.name }}</a>
+                        </li>
+                    {% else %}
+                        <li><a class="button success" href="{% url 'business:SignUpPage' %}">start a
+                            restaurant?</a></li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+
+
+
+    <div id="editProfileModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true"
+         role="dialog">
+        <form action="{% url 'accounts:profilePage' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if userUpdateForm.non_field_errors %}
+                <span class="error">{{ userUpdateForm.non_field_errors }}</span>
+            {% endif %}
+            {% for field in userUpdateForm %}
+                <label class="{{ field.help_text|yesno:"has-tip," }}{{ field.errors|yesno:" error," }}"
+                        {% if field.help_text %}
+                       data-tooltip aria-haspopup="true"
+                       title="{{ field.help_text }}"{% endif %}>
+                    {{ field.label }}
+                    <small>{{ field.field.required|yesno:'required,' }}</small>
+                    {{ field }}
+                </label>
+                {% if field.errors %}
+                    <small class="error">{{ field.errors }}</small>
+                {% endif %}
+            {% endfor %}
+            <input class="small button success right" type="submit" value="Submit"/>
+        </form>
+    </div>
+{% endblock context %}
+
+{% block javascript %}
+    <script>
+        {% if userUpdateForm.errors or userUpdateForm.non_field_errors %}
+            $('#editProfileModal').foundation('reveal', 'open');
+        {% endif %}
+        $(document).foundation('tab', 'reflow');
+    </script>
+{% endblock javascript %}

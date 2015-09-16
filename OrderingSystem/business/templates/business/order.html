@@ -1,0 +1,64 @@
+{% extends "Customer/base.html" %}
+
+{% block nav_section %}
+
+{% endblock nav_section %}
+
+
+{% block context %}
+
+<head> <meta http-equiv="refresh" content="10" /> </head>
+    <div class="row">
+        <fieldset class="columns small-11 large-9 small-centered large-centered">
+            <legend>In Progress:</legend>
+            <ul>
+                {% for order in progorders %}
+
+                    {% if order.status == 'prog' %}
+                        <li style="list-style-type: none;">
+                            <a class="medium"
+                               href="{% url 'business:OrderPage' order.id %}">{{ 'Order:' }} {{ order.id }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+            <a class="right" href="{% url 'business:InprogressOrderPage' %}">More</a>
+
+        </fieldset>
+
+        <fieldset class="columns small-11 large-9 small-centered large-centered">
+            <legend>Completed</legend>
+            <ul>
+                {% for order in finorders %}
+                    {% if order.status == 'fin' %}
+                        <li style="list-style-type: none;">
+                            <a class="medium"
+                               href="{% url 'business:OrderPage' order.id %}">{{ 'Order:' }} {{ order.id }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+            <a class="right" href="{% url 'business:CompleteOrderPage' %}">More</a>
+        </fieldset>
+
+        <fieldset class="columns small-11 large-9 small-centered large-centered">
+            <legend>Cancelled</legend>
+            <ul>
+                {% for order in canorders %}
+                    {% if order.status == 'can' %}
+                        <li style="list-style-type: none;">
+                            <a class="medium"
+                               href="{% url 'business:OrderPage' order.id %}">{{ 'Order:' }} {{ order.id }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+            <a class="right" href="{% url 'business:CancelOrderPage' %}">More</a>
+        </fieldset>
+    </div>
+
+
+{% endblock context %}

@@ -1,0 +1,55 @@
+{% extends "Customer/base.html" %}
+
+{% block nav_section %}
+
+    <ul class="right">
+        <li class="active"><a href=""> </a></li>
+    </ul>
+
+{% endblock nav_section %}
+
+{% block context %}
+
+    <div class="row">
+        <form action="{% url 'business:EditRestaurantPage' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="columns small-11 large-6 small-centered large-uncentered">
+                    <fieldset>
+                        <legend>Restaurant Detail</legend>
+                        {% for field in restaurant_form %}
+                            <label class="{{ field.help_text|yesno:"has-tip," }}{{ field.errors|yesno:" error," }}"
+                                    {% if field.help_text %}
+                                   data-tooltip aria-haspopup="true"
+                                   title="{{ field.help_text }}"{% endif %}>
+                                {{ field.label }}
+                                <small>{{ field.field.required|yesno:'required,' }}</small>
+                                {{ field }}
+                            </label>
+                            {% if field.errors %}
+                                <small class="error">{{ field.errors }}</small>
+                            {% endif %}
+                        {% endfor %}
+                    </fieldset>
+                </div>
+
+                <div class="columns small-11 large-6 small-centered large-uncentered">
+                    <fieldset>
+                        <legend>Restaurant Address</legend>
+                        {{ address_form }}
+                        {{ zipcode_form }}
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="columns small-11 large-12">
+                    <ul class="button-group round right">
+                        <li><input class="small button success" type="submit" value="Submit"/></li>
+                        <li><a class="small button" href="{% url 'business:RestaurantPage' %}">Cancel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock context %}

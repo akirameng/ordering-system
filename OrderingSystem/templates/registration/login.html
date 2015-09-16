@@ -1,0 +1,35 @@
+{% extends 'Customer/base.html' %}
+{% block context %}
+    <div class="row">
+        <div class="columns small-12">
+            <h1>Login</h1>
+
+            <form id="loginForm" method="post" action="{% url 'auth_login' %}">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <span class="error">{{ form.non_field_errors }}</span>
+                {% endif %}
+                {% for field in form %}
+                    <label class="{{ field.errors|yesno:" error," }}">
+                        {{ field.label }}
+                        <small>{{ field.field.required|yesno:'required,' }}</small>
+                        {{ field }}
+                    </label>
+                    {% if field.errors %}
+                        <small class="error">{{ field.errors }}</small>
+                    {% endif %}
+                {% endfor %}
+                <input class="small button success right" type="submit" value="Login"/>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+
+            <p><a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a></p>
+
+            <p>Forgot your password? <a href="{% url 'auth_password_reset' %}">Reset</a></p>
+
+            <p>Not a member? <a href="{% url 'registration_register' %}">Register</a>!</p>
+        </div>
+    </div>
+
+
+{% endblock context %}
